@@ -46,10 +46,17 @@ export default function HomePage({ navigation }) {
               <Ionicons name="people" size={24} color="#0D47A1" />
               <Text style={styles.cardTitle}>Manage Teams</Text>
             </View>
-            <View style={styles.card}>
+            
+            {/* Modify the "Match" card to navigate to ScorePage */}
+            <TouchableOpacity 
+              style={styles.card} 
+              onPress={() => navigation.navigate('ScorePage')}
+            >
               <Ionicons name="timer" size={24} color="#0D47A1" />
-              <Text style={styles.cardTitle}>Live Scores</Text>
-            </View>
+              <Text style={styles.cardTitle}>Match</Text>
+            </TouchableOpacity>
+
+            
             <View style={styles.card}>
               <Entypo name="tools" size={24} color="#0D47A1" />
               <Text style={styles.cardTitle}>Tools</Text>
