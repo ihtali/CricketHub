@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function PlayerSection({ route, navigation }) {
   const { team1, team2 } = route.params;
-  
-  // State for players in each team
+
   const [team1Players, setTeam1Players] = useState([]);
   const [team2Players, setTeam2Players] = useState([]);
-  
   const [newPlayer, setNewPlayer] = useState('');
-  const [currentTeam, setCurrentTeam] = useState('team1'); // Tracks the current team being edited
+  const [currentTeam, setCurrentTeam] = useState('team1');
 
   const handleAddPlayer = () => {
     if (newPlayer.trim()) {
+      const players = currentTeam === 'team1' ? team1Players : team2Players;
+
+      if (players.includes(newPlayer.trim())) {
+        Alert.alert('Duplicate Player', 'This player already exists in the team.');
+        return;
+      }
+
       if (currentTeam === 'team1') {
         setTeam1Players([...team1Players, newPlayer.trim()]);
       } else {
@@ -21,43 +26,65 @@ export default function PlayerSection({ route, navigation }) {
       }
       setNewPlayer('');
     } else {
-      alert('Please enter a player name.');
+      Alert.alert('Empty Input', 'Please enter a player name.');
+    }
+  };
+
+  const handleRemovePlayer = (player) => {
+    if (currentTeam === 'team1') {
+      setTeam1Players(team1Players.filter((p) => p !== player));
+    } else {
+      setTeam2Players(team2Players.filter((p) => p !== player));
+    }
+  };
+
+  const handleProceed = () => {
+    if (team1Players.length > 0 && team2Players.length > 0) {
+      navigation.navigate('TossPage', { team1, team2, team1Players, team2Players });
+    } else {
+      Alert.alert('Incomplete Teams', 'Please add players to both teams.');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add Players</Text>
+      <Text style={styles.title}>Player Selection</Text>
 
-      {/* Sub-header: Current team being edited */}
       <View style={styles.subHeader}>
         <TouchableOpacity
-          style={currentTeam === 'team1' ? styles.activeTeam : styles.inactiveTeam}
+          style={[styles.teamButton, currentTeam === 'team1' && styles.activeTeam]}
           onPress={() => setCurrentTeam('team1')}
         >
-          <Text style={styles.teamText}>{team1}</Text>
+          <Text style={styles.teamButtonText}>{team1}</Text>
         </TouchableOpacity>
         <Text style={styles.subHeaderText}>VS</Text>
         <TouchableOpacity
-          style={currentTeam === 'team2' ? styles.activeTeam : styles.inactiveTeam}
+          style={[styles.teamButton, currentTeam === 'team2' && styles.activeTeam]}
           onPress={() => setCurrentTeam('team2')}
         >
-          <Text style={styles.teamText}>{team2}</Text>
+          <Text style={styles.teamButtonText}>{team2}</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Players list for the selected team */}
+      <Text style={styles.teamTitle}>
+        {currentTeam === 'team1' ? team1 : team2} Players
+      </Text>
       <FlatList
         data={currentTeam === 'team1' ? team1Players : team2Players}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.playerItem}>
             <Text style={styles.playerText}>{item}</Text>
+            <TouchableOpacity onPress={() => handleRemovePlayer(item)}>
+              <Ionicons name="trash" size={24} color="red" />
+            </TouchableOpacity>
           </View>
         )}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>No players added yet.</Text>
+        }
       />
 
-      {/* Add player to the current team */}
       <View style={styles.addPlayerContainer}>
         <TextInput
           style={styles.input}
@@ -70,13 +97,9 @@ export default function PlayerSection({ route, navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* Proceed Button */}
-      <TouchableOpacity
-  style={styles.nextButton}
-  onPress={() => navigation.navigate('MatchSetup')}
->
-  <Text style={styles.nextButtonText}>Proceed to Match Setup</Text>
-</TouchableOpacity>
+      <TouchableOpacity style={styles.proceedButton} onPress={handleProceed}>
+        <Text style={styles.proceedButtonText}>Proceed to Toss</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -84,15 +107,14 @@ export default function PlayerSection({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e3f2fd',
     padding: 20,
+    backgroundColor: '#f0f0f0',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#0D47A1',
-    textAlign: 'center',
     marginBottom: 20,
+    textAlign: 'center',
   },
   subHeader: {
     flexDirection: 'row',
@@ -100,39 +122,46 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 20,
   },
-  subHeaderText: {
-    fontSize: 18,
-    color: '#0D47A1',
-    fontWeight: 'bold',
-    marginHorizontal: 10,
+  teamButton: {
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#0D47A1',
   },
   activeTeam: {
     backgroundColor: '#0D47A1',
-    padding: 10,
-    borderRadius: 5,
   },
-  inactiveTeam: {
-    backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 5,
-    borderColor: '#0D47A1',
-    borderWidth: 1,
-  },
-  teamText: {
-    color: '#fff',
+  teamButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
   },
+  subHeaderText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginHorizontal: 10,
+  },
+  teamTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
   playerItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: '#fff',
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 10,
     marginBottom: 10,
-    elevation: 3,
   },
   playerText: {
     fontSize: 16,
-    color: '#333',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 20,
   },
   addPlayerContainer: {
     flexDirection: 'row',
@@ -144,21 +173,21 @@ const styles = StyleSheet.create({
     height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     paddingHorizontal: 10,
     marginRight: 10,
     backgroundColor: '#fff',
   },
-  nextButton: {
+  proceedButton: {
     backgroundColor: '#0D47A1',
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 30,
+    marginTop: 20,
   },
-  nextButtonText: {
+  proceedButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
 });

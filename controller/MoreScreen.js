@@ -11,20 +11,21 @@ export default function MoreScreen({ navigation }) {
         
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.option} onPress={() => navigation.navigate('ManageFavourites')}>
-        <Text style={styles.optionText}>Manage Favourites</Text>
-      </TouchableOpacity>
       
       <TouchableOpacity style={styles.option} onPress={() => navigation.navigate('PrivacyPolicy')}>
         <Text style={styles.optionText}>Privacy Policy</Text>
       </TouchableOpacity>
       
-      <TouchableOpacity style={styles.option} onPress={() => navigation.navigate('TermsConditions')}>
+      <TouchableOpacity style={styles.option} onPress={() => navigation.navigate('TermsAndConditions')}>
         <Text style={styles.optionText}>Terms and Conditions</Text>
       </TouchableOpacity>
       
       <TouchableOpacity style={styles.option} onPress={() => navigation.navigate('Feedback')}>
         <Text style={styles.optionText}>Feedback</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.option} onPress={() => navigation.navigate('WelcomePage')}>
+        <Text style={styles.optionText}>Log Out</Text>
       </TouchableOpacity>
 
       <View style={styles.logoContainer}>
@@ -75,4 +76,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
