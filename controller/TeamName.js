@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
-export default function ScorePage({ navigation }) {
+export default function TeamName({ navigation }) {
   const [team1, setTeam1] = useState('');
   const [team2, setTeam2] = useState('');
 
