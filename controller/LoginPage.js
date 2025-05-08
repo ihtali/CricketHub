@@ -1,5 +1,4 @@
 
-// LoginPage.js
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";

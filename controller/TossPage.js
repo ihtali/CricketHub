@@ -1,128 +1,56 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import ModernDropdown from '../controller/ModernDropdown' // adjust the path based on where you save ModernDropdown.js
 
-export default function TossPage({ route, navigation }) {
-  const { team1, team2, team1Players, team2Players } = route.params;
+export default function TossPage({ navigation, route }) {
+  const { teamAName, teamBName, teamAPlayers, teamBPlayers } = route.params;
 
-  const [tossWinner, setTossWinner] = useState(null);
-  const [tossDecision, setTossDecision] = useState(null);
-
-  const handleTossWinner = (team) => {
-    setTossWinner(team);
-  };
-
-  const handleTossDecision = (decision) => {
-    setTossDecision(decision);
-  };
-
-  const handleProceed = () => {
-    if (tossWinner && tossDecision) {
-      navigation.navigate('MatchSetup', {
-        team1,
-        team2,
-        team1Players,
-        team2Players,
-        tossWinner,
-        tossDecision,
-      });
-    } else {
-      Alert.alert('Incomplete Toss', 'Please select the toss winner and decision.');
+  const [tossWinner, setTossWinner] = useState('');
+  const [tossDecision, setTossDecision] = useState('');
+  const proceedToOpeningSelection = () => {
+    if (tossWinner === '' || tossDecision === '') {
+      Alert.alert('Incomplete Toss', 'Please select toss winner and decision.');
+      return;
     }
+
+    navigation.navigate('OpeningSelection', {
+      teamAName,
+      teamBName,
+      teamAPlayers,
+      teamBPlayers,
+      tossWinner: tossWinner === teamAName ? 'A' : 'B',
+      tossDecision,
+    });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Toss</Text>
+      <Text style={styles.header}>Toss</Text>
 
-      <Text style={styles.subtitle}>Who won the toss?</Text>
-      <View style={styles.buttonRow}>
-        <TouchableOpacity
-          style={[styles.tossButton, tossWinner === team1 && styles.selectedTossButton]}
-          onPress={() => handleTossWinner(team1)}
-        >
-          <Text style={styles.tossButtonText}>{team1}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tossButton, tossWinner === team2 && styles.selectedTossButton]}
-          onPress={() => handleTossWinner(team2)}
-        >
-          <Text style={styles.tossButtonText}>{team2}</Text>
-        </TouchableOpacity>
-      </View>
+      <ModernDropdown
+        label="Toss Winner"
+        options={[teamAName, teamBName]}
+        selectedValue={tossWinner}
+        onValueChange={(value) => setTossWinner(value)}
+      />
 
-      {tossWinner && (
-        <>
-          <Text style={styles.subtitle}>What did {tossWinner} choose?</Text>
-          <View style={styles.buttonRow}>
-            <TouchableOpacity
-              style={[styles.tossButton, tossDecision === 'Batting' && styles.selectedTossButton]}
-              onPress={() => handleTossDecision('Batting')}
-            >
-              <Text style={styles.tossButtonText}>Batting</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.tossButton, tossDecision === 'Bowling' && styles.selectedTossButton]}
-              onPress={() => handleTossDecision('Bowling')}
-            >
-              <Text style={styles.tossButtonText}>Bowling</Text>
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
+      <ModernDropdown
+        label="Decision"
+        options={['Bat', 'Bowl']}
+        selectedValue={tossDecision}
+        onValueChange={(value) => setTossDecision(value)}
+      />
 
-      <TouchableOpacity style={styles.proceedButton} onPress={handleProceed}>
-        <Text style={styles.proceedButtonText}>Proceed to Match Setup</Text>
+      <TouchableOpacity style={styles.button} onPress={proceedToOpeningSelection}>
+        <Text style={styles.buttonText}>Proceed to Select Players</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#f0f0f0',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 15,
-  },
-  tossButton: {
-    backgroundColor: '#ddd',
-    padding: 15,
-    borderRadius: 10,
-    marginHorizontal: 10,
-  },
-  selectedTossButton: {
-    backgroundColor: '#0D47A1',
-  },
-  tossButtonText: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  proceedButton: {
-    backgroundColor: '#0D47A1',
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 20,
-  },
-  proceedButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
+  container: { flex: 1, padding: 20, backgroundColor: '#e3f2fd', justifyContent: 'center' },
+  header: { fontSize: 24, fontWeight: 'bold', textAlign: 'center', marginBottom: 30 },
+  button: { backgroundColor: '#0D47A1', padding: 15, borderRadius: 10, alignItems: 'center', marginTop: 20 },
+  buttonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
 });

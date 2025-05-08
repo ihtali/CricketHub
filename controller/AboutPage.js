@@ -8,8 +8,8 @@ const AboutScreen = () => {
 
       {/* Local Image */}
       <Image 
-        source={require('../assets/LOGO.jpg')} 
-        style={styles.image}
+          source={require('../assets/LOGO.jpg')} // Add a cricket-related image
+          style={styles.image}
         resizeMode="contain" 
       />
 
