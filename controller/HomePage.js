@@ -20,7 +20,7 @@ export default function HomePage({ navigation, route }) {
       if (!currentUser) return;
       try {
         console.log("Fetching club for UID:", currentUser.uid); // Debug log
-        const clubRef = doc(db, "clubs", currentUser.uid); // Use UID instead of email
+        const clubRef = doc(db, "clubs", currentUser.uid); // This Use UID instead of email
         const clubSnap = await getDoc(clubRef);
   
         if (clubSnap.exists()) {
@@ -70,7 +70,7 @@ export default function HomePage({ navigation, route }) {
         {/* Hero Section */}
         <Animated.View style={[styles.heroSection, { opacity: fadeAnim }]}>
           <Image
-            source={require('../assets/Cricket-bat-ball.png')}
+            source={require('../assets/LOGO.jpg')}
             style={styles.heroImage}
           />
           <LinearGradient colors={['rgba(13, 71, 161, 0.8)', 'rgba(25, 118, 210, 0.8)']} style={styles.heroOverlay}>
@@ -126,7 +126,7 @@ export default function HomePage({ navigation, route }) {
             <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ScheduleManagement')} disabled={isGuest}>
               <Ionicons name="people" size={40} color="#0D47A1" />
               <Text style={styles.cardTitle}>Schedule Management</Text>
-              <Text style={styles.cardText}>Easily manage your teams, player profiles, and roles.</Text>
+              <Text style={styles.cardText}>Set your upcoming match Schedule</Text>
               {isGuest && <Text style={styles.lockedText}>Log in to access</Text>}
             </TouchableOpacity>
 

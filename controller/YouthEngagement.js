@@ -6,16 +6,12 @@ export default function YouthEngagement({ navigation }) {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.title}>Youth Engagement</Text>
-        </View>
 
         {/* Hero Section */}
         <View style={styles.heroSection}>
           <Image
-            source={require('../assets/Youth.png')} // Add a youth cricket-related image
-            style={styles.heroImage}
+          source={require('../assets/Youth.png')} // Add a cricket-related image
+          style={styles.heroImage}
           />
           <Text style={styles.heroText}>
             Empowering the next generation of cricketers!
@@ -32,9 +28,6 @@ export default function YouthEngagement({ navigation }) {
                <Text style={styles.storyTitle}>Imran Khan: The Inspirational Leader</Text>
                <Text style={styles.storyText}> Imran Khan, a legendary all-rounder and Pakistan's World Cup-winning captain, was known for his charismatic leadership and exceptional cricketing skills.His ability to inspire his team and perform under pressure cemented his legacy as one of cricket’s greats.
                </Text>
-               <TouchableOpacity style={styles.readMoreButton}>
-                <Text style={styles.readMoreText}>Read More</Text>
-                 </TouchableOpacity>
                  </View>
           {/* Babar Azam Story */}
           <View style={styles.storyCard}>
@@ -48,9 +41,7 @@ export default function YouthEngagement({ navigation }) {
               He started playing cricket at a young age and worked hard to become one of the best batsmen in the world. 
               His dedication and focus are an inspiration to young players.
             </Text>
-            <TouchableOpacity style={styles.readMoreButton}>
-              <Text style={styles.readMoreText}>Read More</Text>
-            </TouchableOpacity>
+           
           </View>
 
           {/* Virat Kohli Story */}
@@ -65,9 +56,7 @@ export default function YouthEngagement({ navigation }) {
               He transformed himself from a talented youngster to one of the greatest batsmen of all time. 
               His work ethic and passion for the game are lessons for every aspiring cricketer.
             </Text>
-            <TouchableOpacity style={styles.readMoreButton}>
-              <Text style={styles.readMoreText}>Read More</Text>
-            </TouchableOpacity>
+           
           </View>
 
           {/* Ellyse Perry Story */}
@@ -82,9 +71,7 @@ export default function YouthEngagement({ navigation }) {
               She excels in both batting and bowling and has been a role model for young girls aspiring to play cricket. 
               Her determination and versatility are truly inspiring.
             </Text>
-            <TouchableOpacity style={styles.readMoreButton}>
-              <Text style={styles.readMoreText}>Read More</Text>
-            </TouchableOpacity>
+        
           </View>
 
           {/* Sachin Tendulkar Story */}
@@ -98,9 +85,7 @@ export default function YouthEngagement({ navigation }) {
               Sachin Tendulkar, often referred to as the "God of Cricket," is one of the greatest batsmen in the history of the sport. 
               His career spanned 24 years, during which he broke numerous records and inspired millions of young cricketers worldwide.
             </Text>
-            <TouchableOpacity style={styles.readMoreButton}>
-              <Text style={styles.readMoreText}>Read More</Text>
-            </TouchableOpacity>
+        
           </View>
 
           
@@ -115,7 +100,7 @@ export default function YouthEngagement({ navigation }) {
           </Text>
           <TouchableOpacity
             style={styles.ctaButton}
-            onPress={() => navigation.navigate('JoinClub')}
+            onPress={() => navigation.navigate('RegistrationPage')}
           >
             <Text style={styles.ctaButtonText}>Join a Club</Text>
           </TouchableOpacity>
